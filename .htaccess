@@ -1,0 +1,50 @@
+Options -Indexes
+DirectoryIndex link.php
+
+<FilesMatch "\.(sqlite|sqlite3|db|db3|log|ini|env|json|md|sql|bak)(-wal|-shm|\.corrupt\.[0-9]+)?$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^(config|config\.local|key|tg|panel_lib)\.php(\.example)?$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^config\.local\.php\.example$">
+    Require all denied
+</FilesMatch>
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^([a-z0-9\-]+)/api\.php$ api.php?product=$1 [L,QSA]
+RewriteRule ^([a-z0-9\-]+)/docs$ api_docs.php?product=$1 [L,QSA]
+
+RewriteRule (^\.|/\.) - [F]
+RewriteRule ^database/ - [F]
+RewriteRule "^(\.git|\.env|composer\.|package\.)" - [F]
+
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set Referrer-Policy "no-referrer"
+
+    <FilesMatch "^(api|api_docs)\.php$">
+        Header always set Access-Control-Allow-Origin "*"
+        Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS"
+        Header always set Access-Control-Allow-Headers "Content-Type, X-API-Key, X-Requested-With, Authorization"
+        Header always set Access-Control-Max-Age "86400"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_METHOD} =OPTIONS
+    RewriteCond %{REQUEST_URI} api\.php
+    RewriteRule ^ - [L]
+</IfModule>

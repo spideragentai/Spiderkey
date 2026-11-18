@@ -1,0 +1,24 @@
+<?php
+// config.local.php.example — این فایل را به config.local.php تغییر نام دهید و مقادیر را پر کنید
+
+// توکن ربات از @BotFather (پیشنهاد: بعد از انتقال، توکن جدید بگیرید)
+define('BOT_TOKEN', '123456:ABC-your-bot-token');
+
+// آیدی عددی ادمین‌های ربات
+define('ADMIN_IDS', [123456789]);
+
+// رشته‌ی تصادفی؛ برای امضای webhook تلگرام
+define('WEBHOOK_SECRET', 'random-32-chars-A-Za-z0-9');
+
+// ⚠️ هرگز تغییر ندهید! کلیدهای لایسنس با این مقدار رمز/هش شده‌اند؛ تغییرش همه‌ی کلیدها را از کار می‌اندازد
+define('SECRET_SALT', 'at-least-64-random-chars (openssl rand -hex 32)');
+
+// امضای API قدیمی (api/activate.php و verify.php) — با تغییر آن باید مود هم به‌روز شود
+define('API_SECRET', 'at-least-64-random-chars (openssl rand -hex 32)');
+
+// رمز ورود ادمین. ترجیحاً هش باشد: php -r "echo password_hash('رمز', PASSWORD_BCRYPT);"
+define('ADMIN_PANEL_PASSWORD', '$2y$10$...bcrypt-hash...');
+
+// آدرس API که در پنل نمایش داده می‌شود
+define('DEFAULT_API_URL', 'https://example.com/api.php');
+
